@@ -8,4 +8,50 @@ class Animals{
   cow(){
     print "MOO";
   }
+  donkey(){
+    print "HEEHAW";
+  }
+  horse(){
+    print "NEIGH";
+  }
+  sheep(){
+    print "BAAA";
+  }
+  dog(){
+    print "WOOF";
+  }
+  cat(){
+    print "MEOW";
+  }
+  pig(){
+    print "OINK";
+  }
+  duck(){
+    print "QUACK";
+  }
+  rooster(){
+    print "COCK-A-DOODLE-DOO";
+  }
+  frog(){
+    print "RIBBIT";
+  }
 }
+
+class Zoo < Animals{
+  init(name){
+    this.zookeeper = name;
+  }
+
+  welcome(){
+    print "Welcome to " + this.zookeeper + "'s zoo!";
+  }
+}
+
+var oldMcdonald = Zoo("McDonald");
+
+oldMcdonald.welcome();
+
+oldMcdonald.cat();
+oldMcdonald.pig();
+oldMcdonald.donkey;
+oldMcdonald.zebra();
