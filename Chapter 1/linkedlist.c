@@ -97,7 +97,7 @@ int main(void){
         printf(" - %s\n", (char*)current->data);
     }
 
-    printf("Search for 'cat' -> %s\n", findItem(petList, "cat") ? "FOUND" : "NOT FOUND");
+    printf("\nSearch for 'cat' -> %s\n", findItem(petList, "cat") ? "FOUND" : "NOT FOUND");
     printf("Search for 'turtle' -> %s\n", findItem(petList, "turtle") ? "FOUND" : "NOT FOUND");
 
     printf("\nDeleting an existing item:\n");
