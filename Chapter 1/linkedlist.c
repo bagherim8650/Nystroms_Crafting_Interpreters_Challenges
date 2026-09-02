@@ -49,7 +49,7 @@ bool findItem(Node* list, char target[]){
 }
 
 void deleteItem(Node** list, char target[]){
-    if(*list == NULL){
+    if(*list == NULL || !findItem(*list, target)){
         printf("Item does not exist.\n");
         return;
     }
