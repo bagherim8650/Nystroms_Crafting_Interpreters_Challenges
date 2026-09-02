@@ -74,8 +74,6 @@ void deleteItem(Node** list, char target[]){
         }
         currentNode = currentNode->next;
     }
-
-    printf("Item does not exist.\n");
 }
 
 int main(void){
