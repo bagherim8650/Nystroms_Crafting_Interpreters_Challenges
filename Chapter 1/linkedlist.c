@@ -77,7 +77,7 @@ void deleteItem(Node** list, char target[]){
 }
 
 int main(void){
-    printf("Creating a new linked list for pets");
+    printf("Creating a new linked list for pets\n");
     Node* petList = NULL;
 
     char *pet1 = "dog";
@@ -91,6 +91,11 @@ int main(void){
     insertNode(&petList, pet3);
     insertNode(&petList, pet4);
     insertNode(&petList, pet5);
+
+    printf("\ New list:\n");
+    for (Node* current = petList; current != NULL; current = current->next) {
+        printf(" - %s\n", (char*)current->data);
+    }
 
     printf("Search for 'cat' -> %s\n", findItem(petList, "cat") ? "FOUND" : "NOT FOUND");
     printf("Search for 'turtle' -> %s\n", findItem(petList, "turtle") ? "FOUND" : "NOT FOUND");
