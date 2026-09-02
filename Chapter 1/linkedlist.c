@@ -92,7 +92,7 @@ int main(void){
     insertNode(&petList, pet4);
     insertNode(&petList, pet5);
 
-    printf("\ New list:\n");
+    printf("\nNew list:\n");
     for (Node* current = petList; current != NULL; current = current->next) {
         printf(" - %s\n", (char*)current->data);
     }
