@@ -1,0 +1,11 @@
+class Animals{
+  lion(){
+    print "ROAR";
+  }
+  monkey(){
+    print "OOH OOH AAH AAH";
+  }
+  cow(){
+    print "MOO";
+  }
+}
