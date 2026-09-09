@@ -13,3 +13,13 @@ Chapter 4/lox/com/craftinginterpreters/lox/Scanner.class
 .gitignore
 Chapter 4/lox/com/craftinginterpreters/lox/TokenType.class
 Chapter 4/lox/com/craftinginterpreters/lox/Token.class
+lox/Lox.class
+.gitignore
+lox/Scanner.class
+.gitignore
+lox/Token.class
+lox/out/com/craftinginterpreters/lox/Lox.class
+lox/out/com/craftinginterpreters/lox/Token.class
+lox/out/com/craftinginterpreters/lox/Scanner.class
+lox/out/com/craftinginterpreters/lox/TokenType.class
+lox/TokenType.class
