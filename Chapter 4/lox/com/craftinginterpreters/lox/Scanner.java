@@ -13,6 +13,7 @@ class Scanner {
   private int start = 0;
   private int current = 0;
   private int line = 1;
+  private int blockCommentDepth = 0;
 
   Scanner(String source) {
     this.source = source;
@@ -59,23 +60,31 @@ class Scanner {
           // A comment goes until the end of the line.
           while (peek() != '\n' && !isAtEnd()) advance();
         }
-				//Challenge 4: add support for C-style block comments
-				//By Melika Bagheri
-				else if(match('*')){
-					while(!(peek() == '*' && peekNext() == '/')){
-						if(isAtEnd()){
-							Lox.error(line, "Unclosed block comment");
-							break;
-						}else if(peek() == '\n'){
-							line++;
-						}
-						advance();
-					}
-					if(!isAtEnd()){
-						advance();
-						advance();
-					}
-				} else {
+        // Challenge 4: add support for C-style block comments
+        // By Melika Bagheri
+        else if (match('*')) {
+          blockCommentDepth = 1;
+
+          while (!isAtEnd() && blockCommentDepth > 0) {
+            if (peek() == '/' && peekNext() == '*') {
+              blockCommentDepth++;
+              advance();
+              advance();
+            } else if (peek() == '*' && peekNext() == '/') {
+              blockCommentDepth--;
+              advance();
+              advance();
+            } else {
+              if (peek() == '\n') line++;
+              advance();
+            }
+          }
+
+          if (blockCommentDepth != 0) {
+            Lox.error(line, "Unclosed block comment");
+          }
+          blockCommentDepth = 0;
+        } else {
           addToken(SLASH);
         }
         break;
