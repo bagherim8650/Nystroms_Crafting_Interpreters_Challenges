@@ -8,3 +8,8 @@ jlox
 clox
 Chapter 1/helloworld
 .gitignore
+Chapter 4/lox/com/craftinginterpreters/lox/Lox.class
+Chapter 4/lox/com/craftinginterpreters/lox/Scanner.class
+.gitignore
+Chapter 4/lox/com/craftinginterpreters/lox/TokenType.class
+Chapter 4/lox/com/craftinginterpreters/lox/Token.class

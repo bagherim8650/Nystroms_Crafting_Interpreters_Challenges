@@ -8,26 +8,26 @@ import java.util.Map;
 import static com.craftinginterpreters.lox.TokenType.*;
 
 class Scanner {
-	private final String source;
-	private final List<Token> tokens = new ArrayList<>();
-	private int start = 0;
-	private int current = 0;
-	private int line = 1;
+  private final String source;
+  private final List<Token> tokens = new ArrayList<>();
+  private int start = 0;
+  private int current = 0;
+  private int line = 1;
 
-	Scanner(String source) {
-		this.source = source;
-	}
+  Scanner(String source) {
+    this.source = source;
+  }
 
-	List<Token> scanTokens() {
-		while (!isAtEnd()) {
-			// We are at the beginning of the next lexeme.
-			start = current;
-			scanToken();
-		}
+  List<Token> scanTokens() {
+    while (!isAtEnd()) {
+      // We are at the beginning of the next lexeme.
+      start = current;
+      scanToken();
+    }
 
-		tokens.add(new Token(EOF, "", null, line));
-		return tokens;
-	}
+    tokens.add(new Token(EOF, "", null, line));
+    return tokens;
+  }
 
 	private void scanToken() {
 		char c = advance();
@@ -58,7 +58,24 @@ class Scanner {
         if (match('/')) {
           // A comment goes until the end of the line.
           while (peek() != '\n' && !isAtEnd()) advance();
-        } else {
+        }
+				//Challenge 4: add support for C-style block comments
+				//By Melika Bagheri
+				else if(match('*')){
+					while(!(peek() == '*' && peekNext() == '/')){
+						if(isAtEnd()){
+							Lox.error(line, "Unclosed block comment");
+							break;
+						}else if(peek() == '\n'){
+							line++;
+						}
+						advance();
+					}
+					if(!isAtEnd()){
+						advance();
+						advance();
+					}
+				} else {
           addToken(SLASH);
         }
         break;
@@ -72,7 +89,8 @@ class Scanner {
           identifier();}
 				else {
           Lox.error(line, "Unexpected character.");
-        }				break;
+        }
+				break;
 		}
 	}
 
