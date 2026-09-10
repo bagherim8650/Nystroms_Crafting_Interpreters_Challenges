@@ -33,3 +33,12 @@ com/craftinginterpreters/tool/GenerateAst.class
 .gitignore
 com/craftinginterpreters/lox/Expr.java
 build/com/craftinginterpreters/tool/GenerateAst.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/AstPrinter.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Binary.class
+.gitignore
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Unary.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Visitor.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Literal.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Grouping.class
