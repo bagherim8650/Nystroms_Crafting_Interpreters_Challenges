@@ -5,27 +5,45 @@ import com.craftinginterpreters.lox.Expr.Grouping;
 import com.craftinginterpreters.lox.Expr.Literal;
 import com.craftinginterpreters.lox.Expr.Unary;
 
-public class RPNConverter implements Expr.Visitor<String>{
+/**
+ * Converts Lox expression trees into Reverse Polish Notation (RPN).
+ */
+public class RPNConverter implements Expr.Visitor<String> {
 
-    public String print(Expr expr){
+    /**
+     * Prints an expression in RPN format.
+     */
+    public String print(Expr expr) {
         return expr.accept(this);
     }
 
-    public String convert(Expr expr){
+    /**
+     * Converts an expression into RPN format.
+     */
+    public String convert(Expr expr) {
         return expr.accept(this);
     }
 
+    /**
+     * Visits a binary expression by printing the left operand,
+     * the right operand, and then the operator.
+     */
     @Override
     public String visitBinaryExpr(Binary expr) {
-        
         return print(expr.left) + ' ' + print(expr.right) + expr.operator.lexeme;
     }
 
+    /**
+     * Visits a grouping expression and ignores the parentheses.
+     */
     @Override
     public String visitGroupingExpr(Grouping expr) {
         return print(expr.expression);
     }
 
+    /**
+     * Visits a literal value.
+     */
     @Override
     public String visitLiteralExpr(Literal expr) {
         if (expr.value == null) {
@@ -35,16 +53,24 @@ public class RPNConverter implements Expr.Visitor<String>{
         }
     }
 
+    /**
+     * Visits a unary expression by printing its operand followed by the operator.
+     */
     @Override
     public String visitUnaryExpr(Unary expr) {
         return print(expr.right) + ' ' + expr.operator.lexeme;
     }
 
+    /**
+     * Runs sample expressions to demonstrate the converter.
+     */
     public static void main(String[] args) {
         RPNConverter converter = new RPNConverter();
-        Token plus  = new Token(TokenType.PLUS,  "+", null, 1);
+
+        // Operators used to construct the sample expression trees.
+        Token plus = new Token(TokenType.PLUS, "+", null, 1);
         Token minus = new Token(TokenType.MINUS, "-", null, 1);
-        Token star  = new Token(TokenType.STAR,  "*", null, 1);
+        Token star = new Token(TokenType.STAR, "*", null, 1);
 
         // Test 1: 1
         Expr e1 = new Expr.Literal(1);
