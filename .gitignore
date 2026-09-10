@@ -31,3 +31,5 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/TokenType.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Scanner.class
 com/craftinginterpreters/tool/GenerateAst.class
 .gitignore
+com/craftinginterpreters/lox/Expr.java
+build/com/craftinginterpreters/tool/GenerateAst.class
