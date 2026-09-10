@@ -42,3 +42,4 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Unary.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Visitor.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Literal.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Grouping.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/RPNConverter.class
