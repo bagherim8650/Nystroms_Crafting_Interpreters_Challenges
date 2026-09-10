@@ -23,3 +23,9 @@ lox/out/com/craftinginterpreters/lox/Token.class
 lox/out/com/craftinginterpreters/lox/Scanner.class
 lox/out/com/craftinginterpreters/lox/TokenType.class
 lox/TokenType.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Lox.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Token.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/TokenType.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Scanner.class
