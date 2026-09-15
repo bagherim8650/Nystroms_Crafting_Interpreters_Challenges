@@ -43,3 +43,7 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Visitor.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Literal.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Grouping.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/RPNConverter.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$1.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$ParseError.class
