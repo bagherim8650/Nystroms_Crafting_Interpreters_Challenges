@@ -10,3 +10,8 @@ unary          → ( "!" | "-" ) unary
                | primary ;
 primary        → NUMBER | STRING | "true" | "false" | "nil"
                | "(" expression ")" ;
+               //error cases
+               | ( "!=" | "==" ) equality
+               | ( ">" | ">=" | "<" | "<=" ) comparison
+               | ( "+" ) term
+               | ( "/" | "*" ) factor ;

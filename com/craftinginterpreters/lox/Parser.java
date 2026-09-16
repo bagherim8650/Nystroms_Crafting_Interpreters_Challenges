@@ -116,6 +116,32 @@ class Parser {
 			return new Expr.Grouping(expr);
 		}
 
+		//error cases (challenge 3, ch 6)
+
+		if(match(BANG_EQUAL, EQUAL_EQUAL)){
+			error(previous(), "Missing left-hand operand");
+			equality();
+			return null;
+		}
+
+		if(match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)){
+			error(previous(), "Missing left-hand operand");
+			comparison();
+			return null;
+		}
+
+		if(match(PLUS)){
+			error(previous(), "Missing left-hand operand");
+			term();
+			return null;
+		}
+
+		if (match(SLASH, STAR)){
+			error(previous(), "Missing left-hand operand");
+			factor();
+			return null;
+		}
+
 		throw error(peek(), "Expect expression.");
 	}
 
