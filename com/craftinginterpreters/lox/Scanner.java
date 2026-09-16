@@ -43,6 +43,10 @@ class Scanner {
 			case '+': addToken(PLUS); break;
 			case ';': addToken(SEMICOLON); break;
 			case '*': addToken(STAR); break;
+      //Challenge  Chapter 6 : Ternary Operator support
+      //By Melika Bagheri
+      case '?': addToken(QUESTION); break;
+      case ':': addToken(COLON); break;
 			case '!':
 				addToken(match('=') ? BANG_EQUAL : BANG);
 				break;
@@ -60,7 +64,7 @@ class Scanner {
           // A comment goes until the end of the line.
           while (peek() != '\n' && !isAtEnd()) advance();
         }
-        // Challenge 4: add support for C-style block comments
+        // Challenge Chapter 4: add support for C-style block comments
         // By Melika Bagheri
         else if (match('*')) {
           blockCommentDepth = 1;
