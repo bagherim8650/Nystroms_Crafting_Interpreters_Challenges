@@ -1,6 +1,6 @@
 expression     → ternary ;
-ternary        → equality ( "?" expression ":" ternary )? ;
-separator      → ternary ( "," ternary )* ;
+ternary        → equality ( "?" separator ":" separator )? ;
+separator      → ternary ( "," ternary )? ;
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term           → factor ( ( "-" | "+" ) factor )* ;
@@ -10,5 +10,3 @@ unary          → ( "!" | "-" ) unary
                | primary ;
 primary        → NUMBER | STRING | "true" | "false" | "nil"
                | "(" expression ")" ;
-
- expression "?" expression ":" expression;

@@ -18,12 +18,25 @@ class Parser {
 		return separator();
 	}
 
-	private Expr separator(){
+	private Expr ternary(){
 		Expr expr = equality();
+
+		if(match(QUESTION)){
+			Expr thenBranch = expression();
+			consume(COLON, "Expect ':' after ternary expression.");
+			Expr elseBranch = expression();
+			expr = new Expr.Ternary(expr, thenBranch, elseBranch);
+		}
+
+		return expr;
+	}
+
+	private Expr separator(){
+		Expr expr = ternary();
 
 		while(match(COMMA)){
 			Token operator = previous();
-			Expr right = equality();
+			Expr right = ternary();
 			expr = new Expr.Binary(expr, operator, right);
 		}
 

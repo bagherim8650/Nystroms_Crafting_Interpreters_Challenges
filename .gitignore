@@ -47,3 +47,4 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$1.class
 .gitignore
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$ParseError.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Ternary.class

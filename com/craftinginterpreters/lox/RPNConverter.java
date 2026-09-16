@@ -4,6 +4,7 @@ import com.craftinginterpreters.lox.Expr.Binary;
 import com.craftinginterpreters.lox.Expr.Grouping;
 import com.craftinginterpreters.lox.Expr.Literal;
 import com.craftinginterpreters.lox.Expr.Unary;
+import com.craftinginterpreters.lox.Expr.Ternary;
 
 /**
  * Converts Lox expression trees into Reverse Polish Notation (RPN).
@@ -59,6 +60,14 @@ public class RPNConverter implements Expr.Visitor<String> {
     @Override
     public String visitUnaryExpr(Unary expr) {
         return print(expr.right) + ' ' + expr.operator.lexeme;
+    }
+
+    //TODO: ternary
+    @Override
+    public String visitTernaryExpr(Ternary expr){
+        return print(expr.thenBranch) + " "
+            +  print(expr.elseBranch) + " "
+            +  print(expr.condition) + " ?";
     }
 
     /**
