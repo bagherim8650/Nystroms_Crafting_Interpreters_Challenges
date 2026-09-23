@@ -8,6 +8,9 @@ import static com.craftinginterpreters.lox.TokenType.*;
 class Parser {
 	private static class ParseError extends RuntimeException {}
 
+	private boolean allowExpression;
+	private boolean foundExpression = false;
+
 	private final List<Token> tokens;
 	private int current = 0;
 
@@ -56,8 +59,31 @@ class Parser {
 
 	private Stmt expressionStatement() {
 		Expr expr = expression();
-		consume(SEMICOLON, "Expect ';' after expression.");
+
+		if (allowExpression && isAtEnd()) {
+			foundExpression = true;
+		} else {
+			consume(SEMICOLON, "Expect ';' after expression.");
+		}
 		return new Stmt.Expression(expr);
+	}
+
+	//Chapter 8 challenge: display expression result
+	Object parseRepl() {
+		allowExpression = true;
+		List<Stmt> statements = new ArrayList<>();
+		while (!isAtEnd()) {
+			statements.add(declaration());
+
+			if (foundExpression) {
+				Stmt last = statements.get(statements.size() - 1);
+				return ((Stmt.Expression) last).expression;
+			}
+
+			allowExpression = false;
+		}
+
+		return statements;
 	}
 
   private List<Stmt> block() {
