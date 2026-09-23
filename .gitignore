@@ -47,3 +47,5 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter.class
 .gitignore
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/RuntimeError.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$1.class
+com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
+com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
