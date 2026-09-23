@@ -42,3 +42,11 @@ lox/Token.class
 lox/TokenType.class
 com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
 com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Environment.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Variable.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Print.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Visitor.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Var.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Expression.class
+com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class

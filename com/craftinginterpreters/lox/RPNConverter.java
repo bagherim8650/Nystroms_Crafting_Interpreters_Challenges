@@ -4,6 +4,7 @@ import com.craftinginterpreters.lox.Expr.Binary;
 import com.craftinginterpreters.lox.Expr.Grouping;
 import com.craftinginterpreters.lox.Expr.Literal;
 import com.craftinginterpreters.lox.Expr.Unary;
+import com.craftinginterpreters.lox.Expr.Variable;
 import com.craftinginterpreters.lox.Expr.Ternary;
 
 /**
@@ -115,5 +116,11 @@ public class RPNConverter implements Expr.Visitor<String> {
             minus,
             new Expr.Literal(4));
         System.out.println("1 + 2 * 3 - 4 -> " + converter.convert(e5));
+    }
+
+    @Override
+    public String visitVariableExpr(Variable expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitVariableExpr'");
     }
 }
