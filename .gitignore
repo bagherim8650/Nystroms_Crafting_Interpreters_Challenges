@@ -31,7 +31,6 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Scanner.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Token.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/TokenType.class
 com/craftinginterpreters/tool/GenerateAst.class
-com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
 jlox
 lox/Lox.class
 lox/out/com/craftinginterpreters/lox/Lox.class
