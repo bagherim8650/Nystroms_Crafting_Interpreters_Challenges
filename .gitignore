@@ -41,3 +41,4 @@ lox/Scanner.class
 lox/Token.class
 lox/TokenType.class
 com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
+com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
