@@ -37,6 +37,7 @@ class Scanner {
   private int start = 0;
   private int current = 0;
   private int line = 1;
+  private int blockCommentDepth = 0;
 //< scan-state
 
   Scanner(String source) {
@@ -67,7 +68,12 @@ class Scanner {
       case '-': addToken(MINUS); break;
       case '+': addToken(PLUS); break;
       case ';': addToken(SEMICOLON); break;
-      case '*': addToken(STAR); break; // [slash]
+      //Challenge  Chapter 6 : Ternary Operator support
+      //By Melika Bagheri
+      case '?': addToken(QUESTION); break;
+      case ':': addToken(COLON); break;
+      case '*': addToken(STAR); break;
+
 //> two-char-tokens
       case '!':
         addToken(match('=') ? BANG_EQUAL : BANG);
@@ -87,8 +93,32 @@ class Scanner {
         if (match('/')) {
           // A comment goes until the end of the line.
           while (peek() != '\n' && !isAtEnd()) advance();
+        // Challenge Chapter 4: add support for C-style block comments
+        // By Melika Bagheri
+        }else if (match('*')) {
+          blockCommentDepth = 1;
+          while (!isAtEnd() && blockCommentDepth > 0) {
+            if (peek() == '/' && peekNext() == '*') {
+              blockCommentDepth++;
+              advance();
+              advance();
+            } else if (peek() == '*' && peekNext() == '/') {
+              blockCommentDepth--;
+              advance();
+              advance();
+            } else {
+              if (peek() == '\n') line++;
+              advance();
+            }
+          }
+
+          if (blockCommentDepth != 0) {
+            Lox.error(line, "Unclosed block comment");
+          }
+          blockCommentDepth = 0;
         } else {
           addToken(SLASH);
+
         }
         break;
 //< slash
