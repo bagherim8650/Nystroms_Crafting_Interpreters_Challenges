@@ -60,6 +60,8 @@ class Interpreter implements Expr.Visitor<Object> {
       case STAR:
         checkNumberOperands(expr.operator, left, right);
 				return (double)left * (double)right;
+      default:
+        break;
     }
 
     // Unreachable.
@@ -77,6 +79,8 @@ class Interpreter implements Expr.Visitor<Object> {
 			case MINUS:
         checkNumberOperand(expr.operator, right);
         return -(double)right;
+      default:
+        break;
     }
 
     // Unreachable.
@@ -131,10 +135,9 @@ private void checkNumberOperand(Token operator, Object operand) {
     }
   }
 
-	@Override
-	public Object visitTernaryExpr(Ternary expr) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'visitTernaryExpr'");
-	}
-
+  @Override
+  public Object visitTernaryExpr(Ternary expr) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'visitTernaryExpr'");
+  }
 }
