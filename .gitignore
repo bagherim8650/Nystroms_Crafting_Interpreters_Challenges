@@ -1,51 +1,43 @@
-build.sh
-.vscode/tasks.json
-.vscode/launch.json
-Chapter 1/linkedlist
-Chapter 1/linkedlist
-Chapter 1/linkedlist
-jlox
-clox
-Chapter 1/helloworld
 .gitignore
+.gitignore
+.vscode/launch.json
+.vscode/tasks.json
+build.sh
+build/com/craftinginterpreters/tool/GenerateAst.class
+Chapter 1/helloworld
+Chapter 1/linkedlist
 Chapter 4/lox/com/craftinginterpreters/lox/Lox.class
 Chapter 4/lox/com/craftinginterpreters/lox/Scanner.class
-.gitignore
-Chapter 4/lox/com/craftinginterpreters/lox/TokenType.class
 Chapter 4/lox/com/craftinginterpreters/lox/Token.class
-lox/Lox.class
-.gitignore
-lox/Scanner.class
-.gitignore
-lox/Token.class
-lox/out/com/craftinginterpreters/lox/Lox.class
-lox/out/com/craftinginterpreters/lox/Token.class
-lox/out/com/craftinginterpreters/lox/Scanner.class
-lox/out/com/craftinginterpreters/lox/TokenType.class
-lox/TokenType.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Lox.class
-.gitignore
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Token.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/TokenType.class
-.gitignore
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Scanner.class
-com/craftinginterpreters/tool/GenerateAst.class
-build/com/craftinginterpreters/tool/GenerateAst.class
+Chapter 4/lox/com/craftinginterpreters/lox/TokenType.class
+clox
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/AstPrinter.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Binary.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Grouping.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Literal.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Ternary.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Unary.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Visitor.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Literal.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Grouping.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/RPNConverter.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$1.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$ParseError.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Ternary.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter.class
-.gitignore
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/RuntimeError.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$1.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Lox.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$1.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$ParseError.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/RPNConverter.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/RuntimeError.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Scanner.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Token.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/TokenType.class
+com/craftinginterpreters/tool/GenerateAst.class
 com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
-com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
+jlox
+lox/Lox.class
+lox/out/com/craftinginterpreters/lox/Lox.class
+lox/out/com/craftinginterpreters/lox/Scanner.class
+lox/out/com/craftinginterpreters/lox/Token.class
+lox/out/com/craftinginterpreters/lox/TokenType.class
+lox/Scanner.class
+lox/Token.class
+lox/TokenType.class
