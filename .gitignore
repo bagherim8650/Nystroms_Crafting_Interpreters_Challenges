@@ -50,3 +50,4 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Visitor.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Var.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Expression.class
 com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
+com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
