@@ -137,14 +137,14 @@ class Parser {
 		}
 	}
 
-private Stmt breakStatement() {
-  if (loopDepth == 0) {
-    error(previous(), "Must be inside a loop to use 'break'.");
-  }
-  consume(SEMICOLON, "Expect ';' after 'break'.");
-  return new Stmt.Break();
-}
-	
+	private Stmt breakStatement() {
+		if (loopDepth == 0) {
+			error(previous(), "Must be inside a loop to use 'break'.");
+		}
+		consume(SEMICOLON, "Expect ';' after 'break'.");
+		return new Stmt.Break();
+	}
+
 	private Stmt expressionStatement() {
 		Expr expr = expression();
 		consume(SEMICOLON, "Expect ';' after expression.");
