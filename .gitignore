@@ -55,3 +55,4 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Assign.class
 .gitignore
 com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Block.class
+com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
