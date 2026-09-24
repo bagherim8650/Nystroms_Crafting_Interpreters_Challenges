@@ -54,3 +54,5 @@ lox/out/com/craftinginterpreters/lox/TokenType.class
 lox/Scanner.class
 lox/Token.class
 lox/TokenType.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Break.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$BreakException.class
