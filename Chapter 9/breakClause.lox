@@ -1,0 +1,6 @@
+for(var a = 0; a < 100; a = a+5){
+    print(a);
+    if(a/7 == 5){
+        break;
+    }
+}
