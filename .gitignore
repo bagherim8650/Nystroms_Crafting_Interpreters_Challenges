@@ -1,7 +1,4 @@
 .gitignore
-.gitignore
-.gitignore
-.gitignore
 .vscode/launch.json
 .vscode/tasks.json
 build.sh
