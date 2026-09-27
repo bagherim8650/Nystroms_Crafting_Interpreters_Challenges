@@ -17,27 +17,16 @@ class LoxFunction implements LoxCallable {
     if (name == null) return "<fn>";
     return "<fn " + name + ">";
   }
+	@Override
+	public int arity() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'arity'");
+	}
+	@Override
+	public Object call(Interpreter interpreter, List<Object> arguments) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'call'");
+	}
 
-  @Override
-  public int arity() {
-    return declaration.params.size();
-  }
-
-  @Override
-  public Object call(Interpreter interpreter,
-                      List<Object> arguments) {
-    Environment environment = new Environment(closure);
-    for (int i = 0; i < declaration.params.size(); i++) {
-      environment.define(declaration.params.get(i).lexeme,
-          arguments.get(i));
-    }
-
-    try {
-      interpreter.executeBlock(declaration.body, environment);
-    } catch (Return returnValue) {
-      return returnValue.value;
-    }
-    return null;
-  }
 }
 
