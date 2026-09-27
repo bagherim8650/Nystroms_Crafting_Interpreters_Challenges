@@ -7,7 +7,8 @@ class LoxFunction implements LoxCallable {
   private final Expr.Function declaration;
   private final Environment closure;
 
-  LoxFunction(String name, Expr.Function declaration, Environment closure) {
+  LoxFunction(String name, Expr.Function declaration,
+							Environment closure) {
     this.name = name;
     this.closure = closure;
     this.declaration = declaration;
@@ -19,14 +20,19 @@ class LoxFunction implements LoxCallable {
   }
 	@Override
 	public int arity() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'arity'");
+    return declaration.parameters.size();
 	}
 	@Override
-	public Object call(Interpreter interpreter, List<Object> arguments) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'call'");
-	}
+  public Object call(Interpreter interpreter,
+                     List<Object> arguments) {
+    Environment environment = new Environment(interpreter.globals);
+    for (int i = 0; i < declaration.parameters.size(); i++) {
+      environment.define(declaration.parameters.get(i).lexeme,
+          arguments.get(i));
+    }
 
+    interpreter.executeBlock(declaration.body, environment);
+    return null;
+	}
 }
 
