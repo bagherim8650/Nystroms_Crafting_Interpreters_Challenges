@@ -54,3 +54,13 @@ lox/TokenType.class
 notes.txt
 com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
 com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Call.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/LoxCallable.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Function.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/LoxFunction.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Function.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Return.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Return.class
