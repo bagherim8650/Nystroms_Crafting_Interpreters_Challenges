@@ -1,7 +1,9 @@
 package com.craftinginterpreters.lox;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.craftinginterpreters.lox.Expr.Ternary;
 import com.craftinginterpreters.lox.Return;
@@ -9,24 +11,25 @@ import com.craftinginterpreters.lox.Return;
 class Interpreter implements Expr.Visitor<Object>,
 															Stmt.Visitor<Void> {
 
-  final Environment globals = new Environment();
-  private Environment environment = globals;
+	final Environment globals = new Environment();
+	private Environment environment = globals;
+  private final Map<Expr, Integer> locals = new HashMap<>();
 
-  Interpreter() {
-    globals.define("clock", new LoxCallable() {
-      @Override
-      public int arity() { return 0; }
+	Interpreter() {
+		globals.define("clock", new LoxCallable() {
+			@Override
+			public int arity() { return 0; }
 
-      @Override
-      public Object call(Interpreter interpreter,
-                         List<Object> arguments) {
-        return (double)System.currentTimeMillis() / 1000.0;
-      }
+			@Override
+			public Object call(Interpreter interpreter,
+												 List<Object> arguments) {
+				return (double)System.currentTimeMillis() / 1000.0;
+			}
 
-      @Override
-      public String toString() { return "<native fn>"; }
-    });
-  }
+			@Override
+			public String toString() { return "<native fn>"; }
+		});
+	}
 
 	void interpret(List<Stmt> statements) {
 		try {
@@ -43,18 +46,18 @@ class Interpreter implements Expr.Visitor<Object>,
 		return expr.value;
 	}
 
-  @Override
-  public Object visitLogicalExpr(Expr.Logical expr) {
-    Object left = evaluate(expr.left);
+	@Override
+	public Object visitLogicalExpr(Expr.Logical expr) {
+		Object left = evaluate(expr.left);
 
-    if (expr.operator.type == TokenType.OR) {
-      if (isTruthy(left)) return left;
-    } else {
-      if (!isTruthy(left)) return left;
-    }
+		if (expr.operator.type == TokenType.OR) {
+			if (isTruthy(left)) return left;
+		} else {
+			if (!isTruthy(left)) return left;
+		}
 
-    return evaluate(expr.right);
-  }
+		return evaluate(expr.right);
+	}
 
 	@Override
 	public Object visitGroupingExpr(Expr.Grouping expr) {
@@ -68,6 +71,10 @@ class Interpreter implements Expr.Visitor<Object>,
 	private void execute(Stmt stmt) {
 		stmt.accept(this);
 	}
+
+  void resolve(Expr expr, int depth) {
+    locals.put(expr, depth);
+  }
 
 	void executeBlock(List<Stmt> statements,
 										Environment environment) {
@@ -95,12 +102,12 @@ class Interpreter implements Expr.Visitor<Object>,
 		return null;
 	}
 
-  @Override
-  public Void visitFunctionStmt(Stmt.Function stmt) {
-    LoxFunction function = new LoxFunction(stmt, environment);
-    environment.define(stmt.name.lexeme, function);
-    return null;
-  }
+	@Override
+	public Void visitFunctionStmt(Stmt.Function stmt) {
+		LoxFunction function = new LoxFunction(stmt, environment);
+		environment.define(stmt.name.lexeme, function);
+		return null;
+	}
 
 	@Override
 	public Void visitIfStmt(Stmt.If stmt) {
@@ -119,13 +126,13 @@ class Interpreter implements Expr.Visitor<Object>,
 		return null;
 	}
 
-  @Override
-  public Void visitReturnStmt(Stmt.Return stmt) {
-    Object value = null;
-    if (stmt.value != null) value = evaluate(stmt.value);
+	@Override
+	public Void visitReturnStmt(Stmt.Return stmt) {
+		Object value = null;
+		if (stmt.value != null) value = evaluate(stmt.value);
 
-    throw new Return(value);
-  }
+		throw new Return(value);
+	}
 
 	@Override
 	public Void visitVarStmt(Stmt.Var stmt) {
@@ -138,18 +145,25 @@ class Interpreter implements Expr.Visitor<Object>,
 		return null;
 	}
 
-  @Override
-  public Void visitWhileStmt(Stmt.While stmt) {
-    while (isTruthy(evaluate(stmt.condition))) {
-      execute(stmt.body);
-    }
-    return null;
-  }
+	@Override
+	public Void visitWhileStmt(Stmt.While stmt) {
+		while (isTruthy(evaluate(stmt.condition))) {
+			execute(stmt.body);
+		}
+		return null;
+	}
 
 	@Override
 	public Object visitAssignExpr(Expr.Assign expr) {
 		Object value = evaluate(expr.value);
-		environment.assign(expr.name, value);
+
+    Integer distance = locals.get(expr);
+    if (distance != null) {
+      environment.assignAt(distance, expr.name, value);
+    } else {
+      globals.assign(expr.name, value);
+    }
+
 		return value;
 	}
 
@@ -203,29 +217,29 @@ class Interpreter implements Expr.Visitor<Object>,
 		return null;
 	}
 
-  @Override
-  public Object visitCallExpr(Expr.Call expr) {
-    Object callee = evaluate(expr.callee);
+	@Override
+	public Object visitCallExpr(Expr.Call expr) {
+		Object callee = evaluate(expr.callee);
 
-    List<Object> arguments = new ArrayList<>();
-    for (Expr argument : expr.arguments) { 
-      arguments.add(evaluate(argument));
-    }
+		List<Object> arguments = new ArrayList<>();
+		for (Expr argument : expr.arguments) { 
+			arguments.add(evaluate(argument));
+		}
 
-    if (!(callee instanceof LoxCallable)) {
-      throw new RuntimeError(expr.paren,
-          "Can only call functions and classes.");
-    }
+		if (!(callee instanceof LoxCallable)) {
+			throw new RuntimeError(expr.paren,
+					"Can only call functions and classes.");
+		}
 
 
-    LoxCallable function = (LoxCallable)callee;
-    if (arguments.size() != function.arity()) {
-      throw new RuntimeError(expr.paren, "Expected " +
-          function.arity() + " arguments but got " +
-          arguments.size() + ".");
-    }
-    return function.call(this, arguments);
-  }
+		LoxCallable function = (LoxCallable)callee;
+		if (arguments.size() != function.arity()) {
+			throw new RuntimeError(expr.paren, "Expected " +
+					function.arity() + " arguments but got " +
+					arguments.size() + ".");
+		}
+		return function.call(this, arguments);
+	}
 
 
 	@Override
@@ -248,9 +262,17 @@ class Interpreter implements Expr.Visitor<Object>,
 
 	@Override
 	public Object visitVariableExpr(Expr.Variable expr) {
-		return environment.get(expr.name);
+    return lookUpVariable(expr.name, expr);
 	}
 
+  private Object lookUpVariable(Token name, Expr expr) {
+    Integer distance = locals.get(expr);
+    if (distance != null) {
+      return environment.getAt(distance, name.lexeme);
+    } else {
+      return globals.get(name);
+    }
+  }
 
 private void checkNumberOperand(Token operator, Object operand) {
 		if (operand instanceof Double) return;
