@@ -10,7 +10,7 @@ import com.craftinginterpreters.lox.Expr.Unary;
 
 class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 	private final Interpreter interpreter;
-  private final Stack<Map<String, Variable>> scopes = new Stack<>();
+  private final Stack<Scope> scopes = new Stack<>();
   private FunctionType currentFunction = FunctionType.NONE;
 
 	Resolver(Interpreter interpreter) {
@@ -44,9 +44,12 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
   @Override
   public Void visitFunctionStmt(Stmt.Function stmt) {
-    declare(stmt.name);
-    define(stmt.name);
+    int index = declare(stmt.name);
+    if (index != -1) {
+      interpreter.resolve(stmt, index);
+    }
 
+    define(stmt.name);
     resolveFunction(stmt, FunctionType.FUNCTION);
     return null;
   }
@@ -80,10 +83,16 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
   @Override
   public Void visitVarStmt(Stmt.Var stmt) {
-    declare(stmt.name);
+    int index = declare(stmt.name);
+
+    if (index != -1) {
+      interpreter.resolve(stmt, index);
+    }
+
     if (stmt.initializer != null) {
       resolve(stmt.initializer);
     }
+
     define(stmt.name);
     return null;
   }
@@ -98,7 +107,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
   @Override
   public Void visitAssignExpr(Expr.Assign expr) {
     resolve(expr.value);
-    resolveLocal(expr, expr.name, false);
+    resolveLocal(expr, expr.name);
     return null;
   }
 
@@ -146,14 +155,16 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
   @Override
   public Void visitVariableExpr(Expr.Variable expr) {
-    if (!scopes.isEmpty()
-        && scopes.peek().containsKey(expr.name.lexeme)
-        && scopes.peek().get(expr.name.lexeme).state == VariableState.DECLARED) {
-      Lox.error(expr.name,
-          "Can't read local variable in its own initializer.");
+    if (!scopes.isEmpty()) {
+      Local local = scopes.peek().locals.get(expr.name.lexeme);
+
+      if (local != null && !local.defined) {
+        Lox.error(expr.name,
+            "Can't read local variable in its own initializer.");
+      }
     }
 
-    resolveLocal(expr, expr.name, true);
+    resolveLocal(expr, expr.name);
     return null;
   }
 
@@ -179,74 +190,68 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
   }
 
   private void beginScope() {
-    scopes.push(new HashMap<String, Variable>());
+    scopes.push(new Scope());
   }
 
   private void endScope() {
-    Map<String, Variable> scope = scopes.pop();
-
-    for (Map.Entry<String, Variable> entry : scope.entrySet()) {
-      if (entry.getValue().state == VariableState.DEFINED) {
-        Lox.error(entry.getValue().name, "Local variable is not used.");
-      }
-    }
+    scopes.pop();
   }
 
-  private void declare(Token name) {
-    if (scopes.isEmpty()) return;
-
-    Map<String, Variable> scope = scopes.peek();
-
-    if (scope.containsKey(name.lexeme)) {
-      Lox.error(name,
-          "Already a variable with this name in this scope.");
-    }
-
-    scope.put(name.lexeme, new Variable(name, VariableState.DECLARED));
-  }
-
-  private void define(Token name) {
-    if (scopes.isEmpty()) return;
-    scopes.peek().get(name.lexeme).state = VariableState.DEFINED;
-  }
-
-  private void resolveLocal(Expr expr, Token name, boolean isRead) {
+  private void resolveLocal(Expr expr, Token name) {
     for (int i = scopes.size() - 1; i >= 0; i--) {
-      if (scopes.get(i).containsKey(name.lexeme)) {
-        interpreter.resolve(expr, scopes.size() - 1 - i);
+      Scope scope = scopes.get(i);
+      Local local = scope.locals.get(name.lexeme);
 
-        // Mark it used.
-        if (isRead) {
-          scopes.get(i).get(name.lexeme).state = VariableState.READ;
-        }
+      if (local != null) {
+        int distance = scopes.size() - 1 - i;
+        interpreter.resolve(expr, distance, local.index);
         return;
       }
     }
-
-    // Not found. Assume it is global.
   }
 
 	@Override
 	public Void visitTernaryExpr(Ternary expr) {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'visitTernaryExpr'");
 	}
 
-  private static class Variable {
-    final Token name;
-    VariableState state;
+  private static class Local {
+    boolean defined;
+    final int index;
 
-    private Variable(Token name, VariableState state) {
-      this.name = name;
-      this.state = state;
+    Local(int index) {
+      this.index = index;
     }
   }
 
-  private enum VariableState {
-    DECLARED,
-    DEFINED,
-    READ
+  private static class Scope {
+    final Map<String, Local> locals = new HashMap<>();
+    int nextIndex = 0;
   }
 
+  private int declare(Token name) {
+    if (scopes.isEmpty()) return -1;
 
+    Scope scope = scopes.peek();
+
+    if (scope.locals.containsKey(name.lexeme)) {
+      Lox.error(name,
+          "Already a variable with this name in this scope.");
+    }
+
+    int index = scope.nextIndex++;
+    scope.locals.put(name.lexeme, new Local(index));
+
+    return index;
+  }
+
+  private void define(Token name) {
+    if (scopes.isEmpty()) return;
+
+    scope().locals.get(name.lexeme).defined = true;
+  }
+
+  private Scope scope() {
+    return scopes.peek();
+  }
 }

@@ -13,7 +13,10 @@ class Interpreter implements Expr.Visitor<Object>,
 
 	final Environment globals = new Environment();
 	private Environment environment = globals;
-  private final Map<Expr, Integer> locals = new HashMap<>();
+  private final Map<Expr, Resolution> locals = new HashMap<>();
+
+	private final Map<Stmt.Var, Integer> localSlots = new HashMap<>();
+	private final Map<Stmt.Function, Integer> functionSlots = new HashMap<>();
 
 	Interpreter() {
 		globals.define("clock", new LoxCallable() {
@@ -72,9 +75,27 @@ class Interpreter implements Expr.Visitor<Object>,
 		stmt.accept(this);
 	}
 
-  void resolve(Expr expr, int depth) {
-    locals.put(expr, depth);
-  }
+	static class Resolution {
+		final int distance;
+		final int index;
+
+		Resolution(int distance, int index) {
+			this.distance = distance;
+			this.index = index;
+		}
+	}
+
+	void resolve(Expr expr, int distance, int index) {
+		locals.put(expr, new Resolution(distance, index));
+	}
+
+	void resolve(Stmt.Var stmt, int index) {
+		localSlots.put(stmt, index);
+	}
+
+	void resolve(Stmt.Function stmt, int index) {
+		functionSlots.put(stmt, index);
+	}
 
 	void executeBlock(List<Stmt> statements,
 										Environment environment) {
@@ -105,7 +126,15 @@ class Interpreter implements Expr.Visitor<Object>,
 	@Override
 	public Void visitFunctionStmt(Stmt.Function stmt) {
 		LoxFunction function = new LoxFunction(stmt, environment);
-		environment.define(stmt.name.lexeme, function);
+
+		Integer index = functionSlots.get(stmt);
+
+		if (index != null) {
+			environment.defineAt(index, function);
+		} else {
+			environment.define(stmt.name.lexeme, function);
+		}
+
 		return null;
 	}
 
@@ -137,11 +166,19 @@ class Interpreter implements Expr.Visitor<Object>,
 	@Override
 	public Void visitVarStmt(Stmt.Var stmt) {
 		Object value = null;
+
 		if (stmt.initializer != null) {
 			value = evaluate(stmt.initializer);
 		}
 
-		environment.define(stmt.name.lexeme, value);
+		Integer index = localSlots.get(stmt);
+
+		if (index != null) {
+			environment.defineAt(index, value);
+		} else {
+			environment.define(stmt.name.lexeme, value);
+		}
+
 		return null;
 	}
 
@@ -157,12 +194,16 @@ class Interpreter implements Expr.Visitor<Object>,
 	public Object visitAssignExpr(Expr.Assign expr) {
 		Object value = evaluate(expr.value);
 
-    Integer distance = locals.get(expr);
-    if (distance != null) {
-      environment.assignAt(distance, expr.name, value);
-    } else {
-      globals.assign(expr.name, value);
-    }
+		Resolution resolution = locals.get(expr);
+
+		if (resolution != null) {
+			environment.assignAt(
+				resolution.distance,
+				resolution.index,
+				value);
+		} else {
+			globals.assign(expr.name, value);
+		}
 
 		return value;
 	}
@@ -266,12 +307,13 @@ class Interpreter implements Expr.Visitor<Object>,
 	}
 
   private Object lookUpVariable(Token name, Expr expr) {
-    Integer distance = locals.get(expr);
-    if (distance != null) {
-      return environment.getAt(distance, name.lexeme);
-    } else {
-      return globals.get(name);
+    Resolution resolution = locals.get(expr);
+
+    if (resolution != null) {
+      return environment.getAt(resolution.distance, resolution.index);
     }
+
+    return globals.get(name);
   }
 
 private void checkNumberOperand(Token operator, Object operand) {

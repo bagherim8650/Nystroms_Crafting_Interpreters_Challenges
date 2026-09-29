@@ -6,6 +6,7 @@ import java.util.Map;
 class Environment {
   final Environment enclosing;
   private final Map<String, Object> values = new HashMap<>();
+  private Object[] slots = new Object[8];
 
   Environment() {
     enclosing = null;
@@ -13,6 +14,48 @@ class Environment {
 
   Environment(Environment enclosing) {
     this.enclosing = enclosing;
+  }
+
+  void define(String name, Object value) {
+    values.put(name, value);
+  }
+
+  void defineAt(int index, Object value) {
+    ensureCapacity(index);
+    slots[index] = value;
+  }
+
+  Object getAt(int distance, int index) {
+    return ancestor(distance).slots[index];
+  }
+
+  void assignAt(int distance, int index, Object value) {
+    Environment environment = ancestor(distance);
+    environment.ensureCapacity(index);
+    environment.slots[index] = value;
+  }
+
+  private void ensureCapacity(int index) {
+    if (index < slots.length) return;
+
+    int capacity = slots.length;
+    while (index >= capacity) {
+      capacity *= 2;
+    }
+
+    Object[] expanded = new Object[capacity];
+    System.arraycopy(slots, 0, expanded, 0, slots.length);
+    slots = expanded;
+  }
+
+  private Environment ancestor(int distance) {
+    Environment environment = this;
+
+    for (int i = 0; i < distance; i++) {
+      environment = environment.enclosing;
+    }
+
+    return environment;
   }
 
   Object get(Token name) {
@@ -39,19 +82,6 @@ class Environment {
 
     throw new RuntimeError(name,
         "Undefined variable '" + name.lexeme + "'.");
-  }
-
-  void define(String name, Object value) {
-    values.put(name, value);
-  }
-
-  Environment ancestor(int distance) {
-    Environment environment = this;
-    for (int i = 0; i < distance; i++) {
-      environment = environment.enclosing;
-    }
-
-    return environment;
   }
 
   Object getAt(int distance, String name) {
