@@ -15,18 +15,19 @@ abstract class Expr {
     R visitTernaryExpr(Ternary expr);
   }
   static class Assign extends Expr {
+    final Token name;
+    final Expr value;
+    int depth = -1;
+    int slot = -1;
+
     Assign(Token name, Expr value) {
       this.name = name;
       this.value = value;
     }
 
-    @Override
     <R> R accept(Visitor<R> visitor) {
       return visitor.visitAssignExpr(this);
     }
-
-    final Token name;
-    final Expr value;
   }
   static class Call extends Expr {
     Call(Expr callee, Token paren, List<Expr> arguments) {
@@ -115,16 +116,17 @@ abstract class Expr {
     final Expr right;
   }
   static class Variable extends Expr {
+    final Token name;
+    int depth = -1;
+    int slot = -1;
+
     Variable(Token name) {
       this.name = name;
     }
 
-    @Override
     <R> R accept(Visitor<R> visitor) {
       return visitor.visitVariableExpr(this);
     }
-
-    final Token name;
   }
   static class Ternary extends Expr {
     Ternary(Expr condition, Expr thenBranch, Expr elseBranch) {

@@ -1,4 +1,3 @@
-.gitignore
 .vscode/launch.json
 .vscode/tasks.json
 build.sh
@@ -64,3 +63,9 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Function.clas
 .gitignore
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Return.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Return.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$2.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$FunctionType.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$VariableState.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Variable.class

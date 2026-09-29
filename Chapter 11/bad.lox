@@ -1,0 +1,8 @@
+fun unused(){
+    var a = 5;
+    var b = 6;
+    var oops = 0;
+    print(a*b);
+}
+
+unused();
