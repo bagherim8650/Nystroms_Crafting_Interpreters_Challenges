@@ -69,3 +69,6 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$FunctionType.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$VariableState.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Variable.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$Resolution.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Local.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Scope.class
