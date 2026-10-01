@@ -64,3 +64,15 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Function.clas
 .gitignore
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Return.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Return.class
+Chapter 12/bagel.lox
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Local.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Scope.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Variable.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$Resolution.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$FunctionType.class
+.gitignore
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$2.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$VariableState.class
