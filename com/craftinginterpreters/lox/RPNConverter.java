@@ -11,6 +11,7 @@ import com.craftinginterpreters.lox.Expr.Set;
 import com.craftinginterpreters.lox.Expr.Unary;
 import com.craftinginterpreters.lox.Expr.Variable;
 import com.craftinginterpreters.lox.Expr.Ternary;
+import com.craftinginterpreters.lox.Expr.This;
 
 /**
  * Converts Lox expression trees into Reverse Polish Notation (RPN).
@@ -157,5 +158,11 @@ public class RPNConverter implements Expr.Visitor<String> {
     public String visitSetExpr(Set expr) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'visitSetExpr'");
+    }
+
+    @Override
+    public String visitThisExpr(This expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitThisExpr'");
     }
 }
