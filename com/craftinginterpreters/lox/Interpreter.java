@@ -128,7 +128,6 @@ class Interpreter implements Expr.Visitor<Object>,
 
 		LoxClass klass = new LoxClass(stmt.name.lexeme, methods);
 
-
 		environment.assign(stmt.name, klass);
 		return null;
 	}
