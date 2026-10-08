@@ -36,11 +36,11 @@ class Parser {
 	private Stmt classDeclaration() {
 		Token name = consume(IDENTIFIER, "Expect class name.");
 
-    Expr.Variable superclass = null;
-    if (match(LESS)) {
-      consume(IDENTIFIER, "Expect superclass name.");
-      superclass = new Expr.Variable(previous());
-    }
+		Expr.Variable superclass = null;
+		if (match(LESS)) {
+			consume(IDENTIFIER, "Expect superclass name.");
+			superclass = new Expr.Variable(previous());
+		}
 
 		consume(LEFT_BRACE, "Expect '{' before class body.");
 
@@ -51,7 +51,7 @@ class Parser {
 
 		consume(RIGHT_BRACE, "Expect '}' after class body.");
 
-    return new Stmt.Class(name, superclass, methods);
+		return new Stmt.Class(name, superclass, methods);
 	}
 
 	private Stmt statement() {
@@ -217,6 +217,26 @@ class Parser {
 			error(equals, "Invalid assignment target.");
 		}
 
+
+		if(match(PLUS_EQUAL, MINUS_EQUAL, STAR_EQUAL, SLASH_EQUAL)){
+			Token op = previous();
+			Expr value = assignment();
+
+			if(expr instanceof Expr.Variable){
+				Token name = ((Expr.Variable)expr).name;
+				TokenType binaryOp = compoundToBinary(op.type);
+				Expr.Binary binop = new Expr.Binary(
+					new Expr.Variable(name),
+					new Token(binaryOp, op.lexeme.substring(0,1),
+						null, op.line),
+						value);
+				return new Expr.Assign(name, binop);
+			}
+
+			error(op, "Invalid assignment target");
+		}
+
+
 		return expr;
 	}
 
@@ -371,13 +391,13 @@ class Parser {
 			return new Expr.Literal(previous().literal);
 		}
 
-    if (match(SUPER)) {
-      Token keyword = previous();
-      consume(DOT, "Expect '.' after 'super'.");
-      Token method = consume(IDENTIFIER,
-          "Expect superclass method name.");
-      return new Expr.Super(keyword, method);
-    }
+		if (match(SUPER)) {
+			Token keyword = previous();
+			consume(DOT, "Expect '.' after 'super'.");
+			Token method = consume(IDENTIFIER,
+					"Expect superclass method name.");
+			return new Expr.Super(keyword, method);
+		}
 
 		if (match(THIS)) return new Expr.This(previous());
 
@@ -418,6 +438,16 @@ class Parser {
 		}
 
 		throw error(peek(), "Expect expression.");
+	}
+
+	private TokenType compoundToBinary(TokenType t) {
+		switch (t) {
+			case PLUS_EQUAL:  return PLUS;
+			case MINUS_EQUAL: return MINUS;
+			case STAR_EQUAL:  return STAR;
+			case SLASH_EQUAL: return SLASH;
+			default: throw new IllegalStateException("Not a compound op");
+		}
 	}
 
 	List<Stmt> parse() {

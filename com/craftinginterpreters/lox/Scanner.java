@@ -65,14 +65,32 @@ class Scanner {
       case '}': addToken(RIGHT_BRACE); break;
       case ',': addToken(COMMA); break;
       case '.': addToken(DOT); break;
-      case '-': addToken(MINUS); break;
-      case '+': addToken(PLUS); break;
+      case '-':
+        if(match('=')){
+          addToken(MINUS_EQUAL);
+          break;
+        }
+        addToken(MINUS);
+        break;
+      case '+':
+        if(match('=')){
+          addToken(PLUS_EQUAL);
+          break;
+        }
+        addToken(PLUS);
+        break;
       case ';': addToken(SEMICOLON); break;
       //Challenge  Chapter 6 : Ternary Operator support
       //By Melika Bagheri
       case '?': addToken(QUESTION); break;
       case ':': addToken(COLON); break;
-      case '*': addToken(STAR); break;
+      case '*':
+        if(match('=')){
+          addToken(STAR_EQUAL);
+          break;
+        }
+        addToken(STAR);
+        break;
 
 //> two-char-tokens
       case '!':
@@ -116,7 +134,10 @@ class Scanner {
             Lox.error(line, "Unclosed block comment");
           }
           blockCommentDepth = 0;
-        } else {
+        }else if(match('=')){
+          addToken(SLASH_EQUAL);
+        }
+        else {
           addToken(SLASH);
 
         }

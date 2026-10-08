@@ -1,0 +1,19 @@
+var x = 10;
+x += 5;   // 15
+x -= 3;   // 12
+x *= 2;   // 24
+x /= 4;   // 6
+print x;  // expect 6
+
+// In a function / local scope, to exercise the resolver:
+fun f() {
+  var y = 1;
+  y += 2;
+  print y;  // 3
+}
+f();
+
+// String concatenation via +=
+var s = "a";
+s += "b";
+print s;  // ab
