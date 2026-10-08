@@ -8,6 +8,7 @@ import com.craftinginterpreters.lox.Expr.Grouping;
 import com.craftinginterpreters.lox.Expr.Literal;
 import com.craftinginterpreters.lox.Expr.Logical;
 import com.craftinginterpreters.lox.Expr.Set;
+import com.craftinginterpreters.lox.Expr.Super;
 import com.craftinginterpreters.lox.Expr.Unary;
 import com.craftinginterpreters.lox.Expr.Variable;
 import com.craftinginterpreters.lox.Expr.Ternary;
@@ -164,5 +165,11 @@ public class RPNConverter implements Expr.Visitor<String> {
     public String visitThisExpr(This expr) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'visitThisExpr'");
+    }
+
+    @Override
+    public String visitSuperExpr(Super expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitSuperExpr'");
     }
 }
