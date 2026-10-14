@@ -1,19 +1,27 @@
+.gitignore
+.gitignore
+.gitignore
+.gitignore
+.gitignore
+.gitignore
 .vscode/launch.json
 .vscode/tasks.json
 build.sh
 build/com/craftinginterpreters/tool/GenerateAst.class
 Chapter 1/helloworld
 Chapter 1/linkedlist
+Chapter 12/bagel.lox
 Chapter 4/lox/com/craftinginterpreters/lox/Lox.class
 Chapter 4/lox/com/craftinginterpreters/lox/Scanner.class
 Chapter 4/lox/com/craftinginterpreters/lox/Token.class
 Chapter 4/lox/com/craftinginterpreters/lox/TokenType.class
-clox
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/AstPrinter.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Environment.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Assign.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Binary.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Call.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Function.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Grouping.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Literal.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Logical.class
@@ -23,25 +31,40 @@ com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Variable.clas
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Visitor.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$1.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$2.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$Resolution.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Lox.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/LoxCallable.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/LoxFunction.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$1.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Parser$ParseError.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$FunctionType.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Local.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Scope.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Variable.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$VariableState.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Return.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/RPNConverter.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/RuntimeError.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Scanner.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Block.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Expression.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Function.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$If.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Print.class
+com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Return.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Var.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Visitor.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$While.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Token.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/TokenType.class
 com/craftinginterpreters/tool/GenerateAst.class
-jlox
+com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
+com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
+com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
 lox/Lox.class
 lox/out/com/craftinginterpreters/lox/Lox.class
 lox/out/com/craftinginterpreters/lox/Scanner.class
@@ -51,28 +74,3 @@ lox/Scanner.class
 lox/Token.class
 lox/TokenType.class
 notes.txt
-com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
-com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Call.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/LoxCallable.class
-.gitignore
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr$Function.class
-.gitignore
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/LoxFunction.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Function.class
-.gitignore
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Return.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Stmt$Return.class
-Chapter 12/bagel.lox
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Local.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Scope.class
-.gitignore
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$Variable.class
-.gitignore
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$Resolution.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$FunctionType.class
-.gitignore
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Interpreter$2.class
-com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Resolver$VariableState.class
-com/craftinginterpreters/tool/out/com/craftinginterpreters/tool/GenerateAst.class
