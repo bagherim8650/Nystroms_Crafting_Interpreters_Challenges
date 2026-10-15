@@ -77,6 +77,7 @@ static InterpretResult run() {
 }
 
 InterpretResult interpret(Chunk* chunk) {
+  resetStack();
 	vm.chunk = chunk;
 	vm.ip = vm.chunk->code;
 	return run();
