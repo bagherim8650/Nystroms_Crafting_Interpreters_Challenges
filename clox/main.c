@@ -24,11 +24,11 @@ int main(int argc, const char* argv[]) {
 
   writeChunk(&chunk, OP_RETURN, 123);
 
-  const int iterations = 10000000;
+  const int iterations = 100000;
   struct timespec start, end;
 
   // Warm-up
-  for (int i = 0; i < 1000000; i++) interpret(&chunk);
+  for (int i = 0; i < 10000; i++) interpret(&chunk);
 
   clock_gettime(CLOCK_MONOTONIC, &start);
 
