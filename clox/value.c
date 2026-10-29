@@ -36,6 +36,8 @@ void printValue(Value value) {
 		case VAL_NIL: printf("nil"); break;
 		case VAL_NUMBER: printf("%g", AS_NUMBER(value)); break;
 		case VAL_OBJ: printObject(value); break;
+		case VAL_EMPTY: printf("<empty>"); break;
+
 	}
 }
 
@@ -46,6 +48,28 @@ bool valuesEqual(Value a, Value b) {
 		case VAL_NIL:    return true;
 		case VAL_NUMBER: return AS_NUMBER(a) == AS_NUMBER(b);
     case VAL_OBJ:    return AS_OBJ(a) == AS_OBJ(b);
+		case VAL_EMPTY:  return true;
 		default:         return false; // Unreachable.
 	}
+}
+
+static uint32_t hashDouble(double value) {
+  union BitCast {
+    double value;
+    uint32_t ints[2];
+  };
+
+  union BitCast cast;
+  cast.value = (value) + 1.0;   // folds -0.0 into +0.0, denormals into normal range
+  return cast.ints[0] + cast.ints[1];
+}
+
+uint32_t hashValue(Value value) {
+  switch (value.type) {
+    case VAL_BOOL:   return AS_BOOL(value) ? 3 : 5;
+    case VAL_NIL:    return 7;
+    case VAL_NUMBER: return hashDouble(AS_NUMBER(value));
+    case VAL_OBJ:    return AS_STRING(value)->hash;   // cached on ObjString
+    case VAL_EMPTY:  return 0;
+  }
 }
