@@ -23,12 +23,12 @@ struct Obj {
 
 struct ObjString {
   Obj obj;
+	bool ownsChars;
   int length;
-  char* chars;
+  const char* chars;
 };
 
-ObjString* takeString(char* chars, int length);
-ObjString* copyString(const char* chars, int length);
+ObjString* makeString(bool ownsChars, char* chars, int length);
 
 static inline bool isObjType(Value value, ObjType type) {
   return IS_OBJ(value) && AS_OBJ(value)->type == type;
