@@ -74,3 +74,4 @@ lox/Scanner.class
 lox/Token.class
 lox/TokenType.class
 notes.txt
+clox/test.lox
