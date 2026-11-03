@@ -43,6 +43,8 @@ Parser parser;
 
 Chunk* compilingChunk;
 
+Table stringConstants;
+
 static Chunk* currentChunk() {
 	return compilingChunk;
 }
@@ -93,13 +95,13 @@ static void consume(TokenType type, const char* message) {
 }
 
 static bool check(TokenType type) {
-  return parser.current.type == type;
+	return parser.current.type == type;
 }
 
 static bool match(TokenType type) {
-  if (!check(type)) return false;
-  advance();
-  return true;
+	if (!check(type)) return false;
+	advance();
+	return true;
 }
 
 static void emitByte(uint8_t byte) {
@@ -190,17 +192,17 @@ static void string(bool canAssign) {
 }
 
 static void namedVariable(Token name, bool canAssign) {
-  uint8_t arg = identifierConstant(&name);
-  if (canAssign && match(TOKEN_EQUAL)) {
-    expression();
-    emitBytes(OP_SET_GLOBAL, arg);
-  } else {
-    emitBytes(OP_GET_GLOBAL, arg);
-  }
+	uint8_t arg = identifierConstant(&name);
+	if (canAssign && match(TOKEN_EQUAL)) {
+		expression();
+		emitBytes(OP_SET_GLOBAL, arg);
+	} else {
+		emitBytes(OP_GET_GLOBAL, arg);
+	}
 }
 
 static void variable(bool canAssign) {
-  namedVariable(parser.previous, canAssign);
+	namedVariable(parser.previous, canAssign);
 }
 
 static void unary(bool canAssign) {
@@ -237,9 +239,9 @@ ParseRule rules[] = {
 	[TOKEN_GREATER_EQUAL] = {NULL,     binary, PREC_COMPARISON},
 	[TOKEN_LESS]          = {NULL,     binary, PREC_COMPARISON},
 	[TOKEN_LESS_EQUAL]    = {NULL,     binary, PREC_COMPARISON},
-  [TOKEN_IDENTIFIER]    = {variable, NULL,   PREC_NONE},
+	[TOKEN_IDENTIFIER]    = {variable, NULL,   PREC_NONE},
 	[TOKEN_STRING]        = {string,   NULL,   PREC_NONE},
-  [TOKEN_NUMBER]        = {number,   NULL,   PREC_NONE},
+	[TOKEN_NUMBER]        = {number,   NULL,   PREC_NONE},
 	[TOKEN_AND]           = {NULL,     NULL,   PREC_NONE},
 	[TOKEN_CLASS]         = {NULL,     NULL,   PREC_NONE},
 	[TOKEN_ELSE]          = {NULL,     NULL,   PREC_NONE},
@@ -268,32 +270,40 @@ static void parsePrecedence(Precedence precedence) {
 		return;
 	}
 
-  bool canAssign = precedence <= PREC_ASSIGNMENT;
-  prefixRule(canAssign);
+	bool canAssign = precedence <= PREC_ASSIGNMENT;
+	prefixRule(canAssign);
 
 	while (precedence <= getRule(parser.current.type)->precedence) {
 		advance();
 		ParseFn infixRule = getRule(parser.previous.type)->infix;
-    infixRule(canAssign);
+		infixRule(canAssign);
 	}
 
-  if (canAssign && match(TOKEN_EQUAL)) {
-    error("Invalid assignment target.");
-  }
+	if (canAssign && match(TOKEN_EQUAL)) {
+		error("Invalid assignment target.");
+	}
 }
 
 static uint8_t identifierConstant(Token* name) {
-  return makeConstant(OBJ_VAL(copyString(name->start,
-                                          name->length)));
+	//Check if we have identifier constant before adding
+	ObjString* string = copyString(name->start, name->length);
+	Value indexValue;
+	if(tableGet(&stringConstants, string, &indexValue)){
+		return (uint8_t)AS_NUMBER(indexValue);
+	}else{
+		uint8_t index = makeConstant(OBJ_VAL(string));
+		tableSet(&stringConstants, string, NUMBER_VAL((double)index));
+		return index;
+	}
 }
 
 static uint8_t parseVariable(const char* errorMessage) {
-  consume(TOKEN_IDENTIFIER, errorMessage);
-  return identifierConstant(&parser.previous);
+	consume(TOKEN_IDENTIFIER, errorMessage);
+	return identifierConstant(&parser.previous);
 }
 
 static void defineVariable(uint8_t global) {
-  emitBytes(OP_DEFINE_GLOBAL, global);
+	emitBytes(OP_DEFINE_GLOBAL, global);
 }
 
 static ParseRule* getRule(TokenType type) {
@@ -305,70 +315,70 @@ static void expression() {
 }
 
 static void varDeclaration() {
-  uint8_t global = parseVariable("Expect variable name.");
+	uint8_t global = parseVariable("Expect variable name.");
 
-  if (match(TOKEN_EQUAL)) {
-    expression();
-  } else {
-    emitByte(OP_NIL);
-  }
-  consume(TOKEN_SEMICOLON,
-          "Expect ';' after variable declaration.");
+	if (match(TOKEN_EQUAL)) {
+		expression();
+	} else {
+		emitByte(OP_NIL);
+	}
+	consume(TOKEN_SEMICOLON,
+					"Expect ';' after variable declaration.");
 
-  defineVariable(global);
+	defineVariable(global);
 }
 
 static void expressionStatement() {
-  expression();
-  consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
-  emitByte(OP_POP);
+	expression();
+	consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
+	emitByte(OP_POP);
 }
 
 static void printStatement() {
-  expression();
-  consume(TOKEN_SEMICOLON, "Expect ';' after value.");
-  emitByte(OP_PRINT);
+	expression();
+	consume(TOKEN_SEMICOLON, "Expect ';' after value.");
+	emitByte(OP_PRINT);
 }
 
 static void synchronize() {
-  parser.panicMode = false;
+	parser.panicMode = false;
 
-  while (parser.current.type != TOKEN_EOF) {
-    if (parser.previous.type == TOKEN_SEMICOLON) return;
-    switch (parser.current.type) {
-      case TOKEN_CLASS:
-      case TOKEN_FUN:
-      case TOKEN_VAR:
-      case TOKEN_FOR:
-      case TOKEN_IF:
-      case TOKEN_WHILE:
-      case TOKEN_PRINT:
-      case TOKEN_RETURN:
-        return;
+	while (parser.current.type != TOKEN_EOF) {
+		if (parser.previous.type == TOKEN_SEMICOLON) return;
+		switch (parser.current.type) {
+			case TOKEN_CLASS:
+			case TOKEN_FUN:
+			case TOKEN_VAR:
+			case TOKEN_FOR:
+			case TOKEN_IF:
+			case TOKEN_WHILE:
+			case TOKEN_PRINT:
+			case TOKEN_RETURN:
+				return;
 
-      default:
-        ; // Do nothing.
-    }
+			default:
+				; // Do nothing.
+		}
 
-    advance();
-  }
+		advance();
+	}
 }
 
 static void declaration() {
-  if (match(TOKEN_VAR)) {
-    varDeclaration();
-  } else {
-    statement();
-  }
+	if (match(TOKEN_VAR)) {
+		varDeclaration();
+	} else {
+		statement();
+	}
 
 	if (parser.panicMode) synchronize();
 }
 
 static void statement() {
-  if (match(TOKEN_PRINT)) {
-    printStatement();
-  } else {
-    expressionStatement();
+	if (match(TOKEN_PRINT)) {
+		printStatement();
+	} else {
+		expressionStatement();
 	}
 }
 
@@ -377,11 +387,15 @@ bool compile(const char* source, Chunk* chunk) {
 	compilingChunk = chunk;
 	parser.hadError = false;
 	parser.panicMode = false;
+	initTable(&stringConstants);
+
 	advance();
 
 	while (!match(TOKEN_EOF)) {
-    declaration();
-  }
+		declaration();
+	}
 
 	endCompiler();
+	freeTable(&stringConstants);
+	return !parser.hadError;
 }
