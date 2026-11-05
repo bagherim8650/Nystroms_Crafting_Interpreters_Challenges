@@ -244,7 +244,9 @@ static void namedVariable(Token name, bool canAssign) {
 		setOp = OP_SET_GLOBAL;
 	}
 
-if (canAssign && match(TOKEN_EQUAL)) {
+	if (canAssign && match(TOKEN_EQUAL)) {
+		expression();
+		
 		emitByte(setOp);
 		if (isLocal) {
 			emitShort((uint16_t)arg); // 2 bytes for local
