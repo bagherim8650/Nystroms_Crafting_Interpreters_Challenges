@@ -46,7 +46,7 @@ typedef struct {
 } Local;
 
 typedef struct {
-	Local locals[UINT8_COUNT];
+	Local locals[UINT16_COUNT];
 	int localCount;
 	int scopeDepth;
 } Compiler;
@@ -123,6 +123,11 @@ static void emitByte(uint8_t byte) {
 static void emitBytes(uint8_t byte1, uint8_t byte2) {
 	emitByte(byte1);
 	emitByte(byte2);
+}
+
+static void emitShort(uint16_t value) {
+  emitByte((uint8_t)(value >> 8));   // High byte
+  emitByte((uint8_t)value);          // Low byte
 }
 
 static void emitReturn() {
@@ -228,7 +233,9 @@ static void string(bool canAssign) {
 static void namedVariable(Token name, bool canAssign) {
 	uint8_t getOp, setOp;
 	int arg = resolveLocal(current, &name);
-	if (arg != -1) {
+	bool isLocal = (arg != -1);
+
+	if (isLocal) {
 		getOp = OP_GET_LOCAL;
 		setOp = OP_SET_LOCAL;
 	} else {
@@ -237,11 +244,20 @@ static void namedVariable(Token name, bool canAssign) {
 		setOp = OP_SET_GLOBAL;
 	}
 
-	if (canAssign && match(TOKEN_EQUAL)) {
-		expression();
-		emitBytes(setOp, (uint8_t)arg);
+if (canAssign && match(TOKEN_EQUAL)) {
+		emitByte(setOp);
+		if (isLocal) {
+			emitShort((uint16_t)arg); // 2 bytes for local
+		} else {
+			emitByte((uint8_t)arg);   // 1 byte for global
+		}
 	} else {
-		emitBytes(getOp, (uint8_t)arg);
+		emitByte(getOp);
+		if (isLocal) {
+			emitShort((uint16_t)arg); // 2 bytes for local
+		} else {
+			emitByte((uint8_t)arg);   // 1 byte for global
+		}
 	}
 }
 
@@ -353,7 +369,7 @@ static int resolveLocal(Compiler* compiler, Token* name) {
 }
 
 static void addLocal(Token name) {
-	if (current->localCount == UINT8_COUNT) {
+	if (current->localCount == UINT16_COUNT) {
 		error("Too many local variables in function.");
 		return;
 	}
