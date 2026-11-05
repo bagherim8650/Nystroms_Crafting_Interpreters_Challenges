@@ -15,6 +15,7 @@ Chapter 4/lox/com/craftinginterpreters/lox/Lox.class
 Chapter 4/lox/com/craftinginterpreters/lox/Scanner.class
 Chapter 4/lox/com/craftinginterpreters/lox/Token.class
 Chapter 4/lox/com/craftinginterpreters/lox/TokenType.class
+clox/test.lox
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/AstPrinter.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Environment.class
 com/craftinginterpreters/lox/out/com/craftinginterpreters/lox/Expr.class
@@ -74,4 +75,3 @@ lox/Scanner.class
 lox/Token.class
 lox/TokenType.class
 notes.txt
-clox/test.lox
