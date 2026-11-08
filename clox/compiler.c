@@ -55,6 +55,9 @@ Parser parser;
 
 Compiler* current = NULL;
 
+int innermostLoopStart = -1;
+int innermostLoopScopeDepth = 0;
+
 Chunk* compilingChunk;
 
 static Chunk* currentChunk() {
@@ -500,9 +503,14 @@ static void forStatement() {
   } else {
     expressionStatement();
   }
-
   int loopStart = currentChunk()->count;
+  int surroundingLoopStart = innermostLoopStart;
+  int surroundingLoopScopeDepth = innermostLoopScopeDepth;
+  innermostLoopStart = loopStart;
+  innermostLoopScopeDepth = current->scopeDepth;
+
   int exitJump = -1;
+
   if (!match(TOKEN_SEMICOLON)) {
     expression();
     consume(TOKEN_SEMICOLON, "Expect ';' after loop condition.");
@@ -521,17 +529,22 @@ static void forStatement() {
 
     emitLoop(loopStart);
     loopStart = incrementStart;
+    innermostLoopStart = loopStart;
     patchJump(bodyJump);
   }
 
   statement();
+
+  emitLoop(loopStart);
 
   if (exitJump != -1) {
     patchJump(exitJump);
     emitByte(OP_POP); // Condition.
   }
 
-  emitLoop(loopStart);
+  innermostLoopStart = surroundingLoopStart;             
+  innermostLoopScopeDepth = surroundingLoopScopeDepth;  
+
   endScope();
 }
 
@@ -561,6 +574,10 @@ static void printStatement() {
 
 static void whileStatement() {
   int loopStart = currentChunk()->count;
+  int surroundingLoopStart = innermostLoopStart;
+  int surroundingLoopScopeDepth = innermostLoopScopeDepth;
+  innermostLoopStart = loopStart;
+  innermostLoopScopeDepth = current->scopeDepth;
   consume(TOKEN_LEFT_PAREN, "Expect '(' after 'while'.");
   expression();
   consume(TOKEN_RIGHT_PAREN, "Expect ')' after condition.");
@@ -572,6 +589,27 @@ static void whileStatement() {
 
   patchJump(exitJump);
   emitByte(OP_POP);
+
+  innermostLoopStart = surroundingLoopStart;            
+  innermostLoopScopeDepth = surroundingLoopScopeDepth;  
+}
+
+static void continueStatement() {
+  if (innermostLoopStart == -1) {
+    error("Can't use 'continue' outside of loop.");
+  }
+
+  consume(TOKEN_SEMICOLON, "Expect ';' after 'continue'.");
+
+  // Discard any locals created inside the loop.
+  for (int i = current->localCount - 1;
+        i >= 0 && current->locals[i].depth > innermostLoopScopeDepth;
+        i--) {
+    emitByte(OP_POP);
+  }
+
+  // Jump to top of current innermost loop.
+  emitLoop(innermostLoopStart);
 }
 
 static void synchronize() {
@@ -617,6 +655,8 @@ static void statement() {
     ifStatement();
   } else if (match(TOKEN_WHILE)) {
     whileStatement();
+	} else if (match(TOKEN_CONTINUE)) {
+		continueStatement();
 	} else if (match(TOKEN_LEFT_BRACE)) {
 		beginScope();
 		block();
