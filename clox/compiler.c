@@ -237,6 +237,7 @@ static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 static uint8_t identifierConstant(Token* name);
 static int resolveLocal(Compiler* compiler, Token* name);
+static uint8_t argumentList();
 
 static void binary(bool canAssign) {
 	TokenType operatorType = parser.previous.type;
