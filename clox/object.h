@@ -35,7 +35,7 @@ typedef struct {
   ObjString* name;
 } ObjFunction;
 
-typedef Value (*NativeFn)(int argCount, Value* args);
+typedef bool (*NativeFn)(int argCount, Value* args);
 
 typedef struct {
   Obj obj;
@@ -49,6 +49,8 @@ struct ObjString {
   char* chars;
 	uint32_t hash;
 };
+
+
 
 ObjFunction* newFunction();
 ObjNative* newNative(NativeFn function, int arity);
