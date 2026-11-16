@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 #include "common.h"
 #include "compiler.h"
@@ -14,6 +15,26 @@ VM vm;
 
 static Value clockNative(int argCount, Value* args) {
   return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
+}
+
+static Value sqrtNative(int argCount, Value* args) {
+  return NUMBER_VAL(sqrt(AS_NUMBER(args[0])));
+}
+
+static Value powNative(int argCount, Value* args) {
+  return NUMBER_VAL(pow(AS_NUMBER(args[0]), AS_NUMBER(args[1])));
+}
+
+static Value maxNative(int argCount, Value* args) {
+  double a = AS_NUMBER(args[0]);
+  double b = AS_NUMBER(args[1]);
+  return NUMBER_VAL(a > b ? a : b);
+}
+
+static Value minNative(int argCount, Value* args) {
+  double a = AS_NUMBER(args[0]);
+  double b = AS_NUMBER(args[1]);
+  return NUMBER_VAL(a < b ? a : b);
 }
 
 static void resetStack() {
@@ -61,6 +82,10 @@ void initVM() {
 
 
   defineNative("clock", clockNative);
+	defineNative("sqrt",  sqrtNative);
+  defineNative("pow",   powNative);
+  defineNative("max",   maxNative);
+  defineNative("min",   minNative);
 }
 
 void freeVM() {
