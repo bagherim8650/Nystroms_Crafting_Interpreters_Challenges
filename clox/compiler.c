@@ -152,7 +152,7 @@ static int emitJump(uint8_t instruction) {
 }
 
 static void emitReturn() {
-  emitByte(OP_NIL);
+	emitByte(OP_NIL);
 	emitByte(OP_RETURN);
 }
 
@@ -260,8 +260,8 @@ static void binary(bool canAssign) {
 }
 
 static void call(bool canAssign) {
-  uint8_t argCount = argumentList();
-  emitBytes(OP_CALL, argCount);
+	uint8_t argCount = argumentList();
+	emitBytes(OP_CALL, argCount);
 }
 
 static void literal(bool canAssign) {
@@ -490,18 +490,18 @@ static void defineVariable(uint8_t global) {
 }
 
 static uint8_t argumentList() {
-  uint8_t argCount = 0;
-  if (!check(TOKEN_RIGHT_PAREN)) {
-    do {
-      expression();
-      if (argCount == 255) {
-        error("Can't have more than 255 arguments.");
-      }			
-      argCount++;
-    } while (match(TOKEN_COMMA));
-  }
-  consume(TOKEN_RIGHT_PAREN, "Expect ')' after arguments.");
-  return argCount;
+	uint8_t argCount = 0;
+	if (!check(TOKEN_RIGHT_PAREN)) {
+		do {
+			expression();
+			if (argCount == 255) {
+				error("Can't have more than 255 arguments.");
+			}			
+			argCount++;
+		} while (match(TOKEN_COMMA));
+	}
+	consume(TOKEN_RIGHT_PAREN, "Expect ')' after arguments.");
+	return argCount;
 }
 
 static ParseRule* getRule(TokenType type) {
@@ -641,17 +641,17 @@ static void printStatement() {
 }
 
 static void returnStatement() {
-  if (current->type == TYPE_SCRIPT) {
-    error("Can't return from top-level code.");
-  }
+	if (current->type == TYPE_SCRIPT) {
+		error("Can't return from top-level code.");
+	}
 	
-  if (match(TOKEN_SEMICOLON)) {
-    emitReturn();
-  } else {
-    expression();
-    consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
-    emitByte(OP_RETURN);
-  }
+	if (match(TOKEN_SEMICOLON)) {
+		emitReturn();
+	} else {
+		expression();
+		consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
+		emitByte(OP_RETURN);
+	}
 }
 
 static void whileStatement() {
@@ -712,8 +712,8 @@ static void statement() {
 		forStatement();
 	} else if (match(TOKEN_IF)) {
 		ifStatement();
-  } else if (match(TOKEN_RETURN)) {
-    returnStatement();
+	} else if (match(TOKEN_RETURN)) {
+		returnStatement();
 	} else if (match(TOKEN_WHILE)) {
 		whileStatement();
 	} else if (match(TOKEN_LEFT_BRACE)) {

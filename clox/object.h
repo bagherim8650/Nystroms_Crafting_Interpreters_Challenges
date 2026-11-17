@@ -13,39 +13,39 @@
 
 #define AS_FUNCTION(value)     ((ObjFunction*)AS_OBJ(value))
 #define AS_NATIVE(value) \
-    (((ObjNative*)AS_OBJ(value))->function)
+		(((ObjNative*)AS_OBJ(value))->function)
 #define AS_STRING(value)       ((ObjString*)AS_OBJ(value))
 #define AS_CSTRING(value)      (((ObjString*)AS_OBJ(value))->chars)
 
 typedef enum {
-  OBJ_FUNCTION,
-  OBJ_NATIVE,
-  OBJ_STRING,
+	OBJ_FUNCTION,
+	OBJ_NATIVE,
+	OBJ_STRING,
 } ObjType;
 
 struct Obj {
 	ObjType type;
-  struct Obj* next;
+	struct Obj* next;
 };
 
 typedef struct {
-  Obj obj;
-  int arity;
-  Chunk chunk;
-  ObjString* name;
+	Obj obj;
+	int arity;
+	Chunk chunk;
+	ObjString* name;
 } ObjFunction;
 
 typedef Value (*NativeFn)(int argCount, Value* args);
 
 typedef struct {
-  Obj obj;
-  NativeFn function;
+	Obj obj;
+	NativeFn function;
 } ObjNative;
 
 struct ObjString {
-  Obj obj;
-  int length;
-  char* chars;
+	Obj obj;
+	int length;
+	char* chars;
 	uint32_t hash;
 };
 
@@ -55,7 +55,7 @@ ObjString* takeString(char* chars, int length);
 ObjString* copyString(const char* chars, int length);
 
 static inline bool isObjType(Value value, ObjType type) {
-  return IS_OBJ(value) && AS_OBJ(value)->type == type;
+	return IS_OBJ(value) && AS_OBJ(value)->type == type;
 }
 
 void printObject(Value value);
