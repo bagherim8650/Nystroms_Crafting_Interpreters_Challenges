@@ -10,7 +10,7 @@
 #define STACK_MAX (FRAMES_MAX * UINT8_COUNT)
 
 typedef struct {
-  ObjClosure* closure;
+	Obj* function; //can become either ObjClosure* or ObjFunction*
 	uint8_t* ip;
 	Value* slots;
 } CallFrame;
@@ -23,7 +23,7 @@ typedef struct {
 	Value* stackTop;
 	Table globals;
 	Table strings;
-  ObjUpvalue* openUpvalues;
+	ObjUpvalue* openUpvalues;
 	Obj* objects;
 } VM;
 
