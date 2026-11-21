@@ -115,23 +115,20 @@ static bool call(ObjClosure* closure, int argCount) {
 }
 
 static bool callValue(Value callee, int argCount) {
-	if (IS_OBJ(callee)) {
-		switch (OBJ_TYPE(callee)) {
-      case OBJ_CLOSURE:
-        return call(AS_CLOSURE(callee), argCount);
-			case OBJ_NATIVE: {
-				NativeFn native = AS_NATIVE(callee);
-				Value result = native(argCount, vm.stackTop - argCount);
-				vm.stackTop -= argCount + 1;
-				push(result);
-				return true;
-			}
-			default:
-				break; // Non-callable object type.
-		}
-	}
-	runtimeError("Can only call functions and classes.");
-	return false;
+  if (IS_CLOSURE(callee)) {
+    return call(AS_CLOSURE(callee), argCount);
+  }
+
+  if (IS_NATIVE(callee)) {
+    NativeFn native = AS_NATIVE(callee);
+    Value result = native(argCount, vm.stackTop - argCount);
+    vm.stackTop -= argCount + 1;
+    push(result);
+    return true;
+  }
+
+  runtimeError("Can only call functions and classes.");
+  return false;
 }
 
 static ObjUpvalue* captureUpvalue(Value* local) {
@@ -226,9 +223,11 @@ static InterpretResult run() {
 			case OP_FALSE: push(BOOL_VAL(false)); break;
 			case OP_POP: pop(); break;
 			case OP_GET_LOCAL: {
-				uint8_t slot = READ_BYTE();
-				push(frame->slots[slot]);
-				break;
+					uint8_t slot = READ_BYTE();
+					fprintf(stderr, "GET_LOCAL %d -> %p (frame->slots=%p, stack=%p)\n",
+							slot, (void*)&frame->slots[slot], (void*)frame->slots, (void*)vm.stack);
+					push(frame->slots[slot]);
+					break;
 			}
 			case OP_SET_LOCAL: {
 				uint8_t slot = READ_BYTE();
@@ -337,17 +336,18 @@ static InterpretResult run() {
         ObjFunction* function = AS_FUNCTION(READ_CONSTANT());
         ObjClosure* closure = newClosure(function);
         push(OBJ_VAL(closure));
+
         for (int i = 0; i < closure->upvalueCount; i++) {
           uint8_t isLocal = READ_BYTE();
           uint8_t index = READ_BYTE();
+
           if (isLocal) {
-            closure->upvalues[i] =
-                captureUpvalue(frame->slots + index);
+            closure->upvalues[i] = captureUpvalue(frame->slots + index);
           } else {
             closure->upvalues[i] = frame->closure->upvalues[index];
           }
         }
-				break;
+        break;
       }
 			case OP_CLOSE_UPVALUE:
         closeUpvalues(vm.stackTop - 1);

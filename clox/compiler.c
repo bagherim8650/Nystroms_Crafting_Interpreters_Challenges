@@ -228,17 +228,19 @@ static void beginScope() {
 }
 
 static void endScope() {
+    fprintf(stderr, "END_SCOPE: scopeDepth %d -> %d, localCount %d\n",
+        current->scopeDepth, current->scopeDepth - 1, current->localCount);
 	current->scopeDepth--;
 
 	while (current->localCount > 0 &&
 					current->locals[current->localCount - 1].depth >
 						current->scopeDepth) {
-    if (current->locals[current->localCount - 1].isCaptured) {
-      emitByte(OP_CLOSE_UPVALUE);
-    } else {
-      emitByte(OP_POP);
-    }
-		current->localCount--;
+        Local* l = &current->locals[current->localCount - 1];
+        fprintf(stderr, "  popping local %d: depth %d, captured %d, name '%.*s'\n",
+            current->localCount - 1, l->depth, l->isCaptured, l->name.length, l->name.start);
+        if (l->isCaptured) emitByte(OP_CLOSE_UPVALUE);
+        else emitByte(OP_POP);
+        current->localCount--;
 	}
 }
 
@@ -795,7 +797,15 @@ ObjFunction* compile(const char* source) {
 	while (!match(TOKEN_EOF)) {
 		declaration();
 	}
-
-	ObjFunction* function = endCompiler();
-	return parser.hadError ? NULL : function;
+Compiler* finished = current;
+ObjFunction* function = endCompiler();
+if (!parser.hadError && finished->type == TYPE_SCRIPT) {
+    fprintf(stderr, "=== script locals ===\n");
+    for (int i = 0; i < finished->localCount; i++) {
+        Local* l = &finished->locals[i];
+        fprintf(stderr, "  slot %2d  depth %2d  captured %d  name '%.*s'\n",
+            i, l->depth, l->isCaptured, l->name.length, l->name.start);
+    }
+}
+return parser.hadError ? NULL : function;
 }
