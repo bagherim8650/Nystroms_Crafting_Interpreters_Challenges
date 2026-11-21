@@ -20,11 +20,11 @@
 #define AS_CSTRING(value)      (((ObjString*)AS_OBJ(value))->chars)
 
 typedef enum {
-  OBJ_CLOSURE,
+	OBJ_CLOSURE,
 	OBJ_FUNCTION,
 	OBJ_NATIVE,
 	OBJ_STRING,
-  OBJ_UPVALUE
+	OBJ_UPVALUE
 } ObjType;
 
 struct Obj {
@@ -35,7 +35,7 @@ struct Obj {
 typedef struct {
 	Obj obj;
 	int arity;
-  int upvalueCount;
+	int upvalueCount;
 	Chunk chunk;
 	ObjString* name;
 } ObjFunction;
@@ -57,13 +57,15 @@ struct ObjString {
 typedef struct ObjUpvalue {
   Obj obj;
   Value* location;
+  Value closed;
+  struct ObjUpvalue* next;
 } ObjUpvalue;
 
 typedef struct {
-  Obj obj;
-  ObjFunction* function;
-  ObjUpvalue** upvalues;
-  int upvalueCount;
+	Obj obj;
+	ObjFunction* function;
+	ObjUpvalue** upvalues;
+	int upvalueCount;
 } ObjClosure;
 
 ObjClosure* newClosure(ObjFunction* function);

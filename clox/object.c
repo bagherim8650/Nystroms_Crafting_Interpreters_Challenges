@@ -32,8 +32,8 @@ ObjClosure* newClosure(ObjFunction* function) {
 
 	ObjClosure* closure = ALLOCATE_OBJ(ObjClosure, OBJ_CLOSURE);
 	closure->function = function;
-  closure->upvalues = upvalues;
-  closure->upvalueCount = function->upvalueCount;
+	closure->upvalues = upvalues;
+	closure->upvalueCount = function->upvalueCount;
 	return closure;
 }
 
@@ -98,6 +98,7 @@ ObjString* copyString(const char* chars, int length) {
 ObjUpvalue* newUpvalue(Value* slot) {
 	ObjUpvalue* upvalue = ALLOCATE_OBJ(ObjUpvalue, OBJ_UPVALUE);
 	upvalue->location = slot;
+	upvalue->next = NULL;
 	return upvalue;
 }
 
