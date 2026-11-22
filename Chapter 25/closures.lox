@@ -1,0 +1,21 @@
+fun makeVector(x, y) {
+  fun getX() { return x; }
+  fun getY() { return y; }
+  fun setX(newX) { x = newX; }   // writes to the captured cell
+  fun setY(newY) { y = newY; }
+  fun add(other) {
+    return makeVector(x + other("x")(), y + other("y")());
+  }
+  fun dispatch(message) {
+    if (message == "x") return getX;
+    if (message == "y") return getY;
+    if (message == "setX") return setX;
+    if (message == "setY") return setY;
+    if (message == "add") return add;
+  }
+  return dispatch;
+}
+
+var v = makeVector(1, 2);
+v("setX")(100);
+print v("x")();   // 100 — because setX and getX share the same upvalue
