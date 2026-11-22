@@ -575,11 +575,18 @@ static void expressionStatement() {
 }
 static void forStatement() {
   beginScope();
+
+  int loopVariable = -1;
+  Token loopVariableName;
+  loopVariableName.start = NULL;
+
   consume(TOKEN_LEFT_PAREN, "Expect '(' after 'for'.");
-  if (match(TOKEN_SEMICOLON)) {
-    // No initializer.
-  } else if (match(TOKEN_VAR)) {
+  if (match(TOKEN_VAR)) {
+    loopVariableName = parser.current;      // grab name BEFORE consuming
     varDeclaration();
+    loopVariable = current->localCount - 1; // slot of the just-declared local
+  } else if (match(TOKEN_SEMICOLON)) {
+    // No initializer.
   } else {
     expressionStatement();
   }
@@ -607,7 +614,25 @@ static void forStatement() {
     patchJump(bodyJump);
   }
 
+  int innerVariable = -1;
+  if (loopVariable != -1) {
+    beginScope();
+    emitBytes(OP_GET_LOCAL, (uint8_t)loopVariable);
+    addLocal(loopVariableName);
+    markInitialized();
+    innerVariable = current->localCount - 1;
+  }
+
   statement();
+
+  if (loopVariable != -1) {
+    emitBytes(OP_GET_LOCAL, (uint8_t)innerVariable);
+    emitBytes(OP_SET_LOCAL, (uint8_t)loopVariable);
+    emitByte(OP_POP);
+
+    endScope();
+  }
+
   emitLoop(loopStart);
 
   if (exitJump != -1) {
@@ -617,6 +642,7 @@ static void forStatement() {
 
   endScope();
 }
+
 static void ifStatement() {
   consume(TOKEN_LEFT_PAREN, "Expect '(' after 'if'.");
   expression();
