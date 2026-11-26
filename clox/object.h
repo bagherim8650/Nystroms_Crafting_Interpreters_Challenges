@@ -29,6 +29,7 @@ typedef enum {
 
 struct Obj {
   ObjType type;
+  bool isMarked;
   struct Obj* next;
 };
 
@@ -53,12 +54,14 @@ struct ObjString {
   char* chars;
   uint32_t hash;
 };
+
 typedef struct ObjUpvalue {
   Obj obj;
   Value* location;
   Value closed;
   struct ObjUpvalue* next;
 } ObjUpvalue;
+
 typedef struct {
   Obj obj;
   ObjFunction* function;
